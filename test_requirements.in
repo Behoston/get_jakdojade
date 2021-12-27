@@ -1,0 +1,8 @@
+flake8
+flake8-builtins
+flake8-coding
+flake8-commas
+isort
+flake8-isort
+mypy
+pep8-naming
