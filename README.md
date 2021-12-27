@@ -30,6 +30,34 @@ print(generate(
 ))
 ```
 
+You can use `date_time` exchangeable with `date` and `time` parameters for convenience.
+
+### Search now
+
+To search now you need to provide:
+
+- `from_coordinate_latitude`
+- `from_coordinate_longitude`
+- `to_coordinate_latitude`
+- `to_coordinate_latitude`
+- `date_time` or (`date` and `time`)
+- `prepare_search=False` this is default
+
+When searching now, user will be directed to result page instead of search form.
+
+### Places name
+
+Field `from_name` and `to_name` can be anything you want if coordinates provided.
+
+For example: dating app can use:
+`from_name=You` and `to_name=Date in cinema` and point current user location and cinema nearby.
+
+### Error handling
+
+By default, url will be generated even if some parameters are missing. If you want to not generate URL when
+configuration are insufficient (for example: you want search now but, you do not provide date_time), you can pass
+`strict=True` then `InsufficientParameters` will be raised.
+
 ## Release
 
 1. Change version in setup.py to `x.y.z.dev0` (or leave if minor version bump) and ensure changelog is up to date.

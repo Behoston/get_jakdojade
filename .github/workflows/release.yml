@@ -26,7 +26,7 @@ jobs:
       - name: Static analysis
         run: |
           flake8 . --count --show-source --statistics
-          mypy ./hmm_profile/
+          mypy ./get_jakdojade/
   release:
     runs-on: ubuntu-latest
     needs: test

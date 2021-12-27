@@ -29,10 +29,15 @@ class LocationType(enum.Enum):
     LOCATION_TYPE_COORDINATE = 'LOCATION_TYPE_COORDINATE'
 
 
+class InsufficientParameters(Exception):
+    pass
+
+
 def generate(
         *,
         city: str,
         prepare_search: bool = False,
+        strict: bool = False,
         from_coordinate_latitude: typing.Optional[str] = None,
         from_coordinate_longitude: typing.Optional[str] = None,
         from_name: typing.Optional[str] = None,
@@ -68,8 +73,12 @@ def generate(
     if from_coordinate_latitude and from_coordinate_longitude:
         query_dict['fc'] = f'{from_coordinate_latitude}:{from_coordinate_longitude}'
     elif from_coordinate_latitude or from_coordinate_longitude:
-        logger.warning("Both from_coordinate_latitude and from_coordinate_longitude "
-                       "required to set destination coordinates. Omitting...")
+        error_message = (
+            "Both from_coordinate_latitude and from_coordinate_longitude required to set destination coordinates!"
+        )
+        if strict:
+            raise InsufficientParameters(error_message)
+        logger.warning(f"{error_message} Omitting...")
     if from_name:
         query_dict['fn'] = from_name
     if from_stop_name:
@@ -83,8 +92,12 @@ def generate(
     if to_coordinate_latitude and to_coordinate_longitude:
         query_dict['tc'] = f'{to_coordinate_latitude}:{to_coordinate_longitude}'
     elif to_coordinate_latitude or to_coordinate_longitude:
-        logger.warning("Both to_coordinate_latitude and to_coordinate_longitude "
-                       "required to set destination coordinates. Omitting...")
+        error_message = (
+            "Both to_coordinate_latitude and to_coordinate_longitude required to set destination coordinates."
+        )
+        if strict:
+            raise InsufficientParameters(error_message)
+        logger.warning(f"{error_message} Omitting...")
     if to_name:
         query_dict['tn'] = to_name
     if to_stop_name:
@@ -137,7 +150,18 @@ def generate(
             date,
             time,
         ]):
-            logger.warning("'Search now' does not work without all coordinates!")
+
+            error_message = (
+                "'Search now' does not work without all coordinates: "
+                "from_coordinate_latitude, "
+                "from_coordinate_longitude, "
+                "to_coordinate_longitude, "
+                "to_coordinate_latitude, "
+                "date and time or date_time."
+            )
+            if strict:
+                raise InsufficientParameters(error_message)
+            logger.warning(error_message)
         search_now = 'z----do--'
     return f'https://jakdojade.pl/{city}/trasa/{search_now}?{query}'
 
