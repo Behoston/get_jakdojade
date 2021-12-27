@@ -18,7 +18,7 @@ with open(path.join(this_directory, 'test_requirements.txt')) as f:
 setup(
     name='get_jakdojade',
     packages=find_packages(exclude=['tests']),
-    version='0.0.1',
+    version='0.0.2.dev0',
     url='https://github.com/Behoston/get_jakdojade',
     license='MIT',
     author='Behoston',
